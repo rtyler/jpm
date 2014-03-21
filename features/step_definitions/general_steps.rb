@@ -1,13 +1,25 @@
 Given(/^Jenkins isn't installed$/) do
-  # no op right now
-  # pending # express the regexp above with the code you wish you had
+  JPM.stub(:installed? => false)
 end
 
 Given(/^Jenkins is installed$/) do
-  pending
-  # no op right now
+  JPM.stub(:installed? => true)
 end
 
 Given(/^there are no plugins available$/) do
+  JPM.stub(:plugins => [])
 end
 
+Given(/^there are plugins available$/) do
+  JPM.stub(:has_plugins? => true)
+  JPM.stub(:plugins => [
+    {
+      :name => 'greenballs',
+      :version => '1.0'
+    },
+    {
+     :name => 'ant',
+     :version => '1.1'
+    },
+  ])
+end

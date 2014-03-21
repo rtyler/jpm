@@ -25,3 +25,13 @@ Feature: List installed plugins
       """
       No plugins found
       """
+
+  Scenario: Listing with Jenkins installed with plugins
+    Given Jenkins is installed
+    And there are plugins available
+    When I run `jpm list`
+    Then the output should contain:
+      """
+       - ant (1.1)
+       - greenballs (1.0)
+      """

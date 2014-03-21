@@ -3,7 +3,12 @@
 begin
   require 'jpm/cli'
 rescue LoadError => ex
-  puts "Failed to load jpm #{ex}"
+  $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+  begin
+    require 'jpm/cli'
+  rescue LoadError => ex
+    puts "Failed to load jpm #{ex}"
+  end
 end
 
 JPM::CLI.start(ARGV)

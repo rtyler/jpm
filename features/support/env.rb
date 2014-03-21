@@ -2,6 +2,7 @@ require 'rubygems'
 require 'aruba'
 require 'aruba/cucumber'
 require 'aruba/in_process'
+require 'cucumber/rspec/doubles'
 
 require 'jpm/cli'
 
