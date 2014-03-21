@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = 'A Jenkins Plugin Manager'
   gem.summary       = ''
   gem.homepage      = ""
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
