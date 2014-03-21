@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'jpm/cli'
+rescue LoadError => ex
+  puts "Failed to load jpm #{ex}"
+end
+
+JPM::CLI.start(ARGV)
