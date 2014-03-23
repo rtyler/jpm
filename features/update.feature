@@ -1,4 +1,3 @@
-@announce
 Feature: Update the plugin repository
   As a Jenkins user
   On a Jenkins master host
@@ -37,4 +36,14 @@ Feature: Update the plugin repository
       Fetching <http://aruba.bdd/update-center.json> ...
 
       Wrote to ./update-center.json
+      """
+
+  @errorcase
+  Scenario: Attempt to update while offline
+    Given Jenkins is installed
+    When I run `jpm update --offline`
+    Then the exit status should be 1
+    And the output should contain:
+      """
+      This command cannot be run offline
       """

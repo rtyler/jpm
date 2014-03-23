@@ -22,6 +22,13 @@ module JPM
     end
 
     no_tasks do
+      def require_network!
+        if options[:offline]
+          say 'This command cannot be run offline'
+          raise JPM::Errors::CLINetwork
+        end
+      end
+
       def require_jenkins!
         unless JPM.installed?
           say "Jenkins is not installed!"
@@ -64,6 +71,8 @@ module JPM
     option :force, :type => :boolean,
                    :desc => 'Forcefully overwrite any existing repository'
     def update
+      require_network!
+
       url = options[:source]
 
       if File.exists?(File.expand_path(JPM.repository_path))
