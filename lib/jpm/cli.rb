@@ -3,6 +3,7 @@ require 'thor'
 
 require 'jpm'
 require 'jpm/catalog'
+require 'jpm/errors'
 
 module JPM
   class CLI < Thor
@@ -11,21 +12,36 @@ module JPM
     class_option :offline, :type => :boolean,
                            :banner => 'Use `jpm` in a fully offline mode'
 
+    def self.start(*args)
+      begin
+        super
+      rescue JPM::Errors::CLIExit => ex
+        # Swallow it up
+      end
+    end
+
+    no_tasks do
+      def require_jenkins!
+        unless JPM.installed?
+          say "Jenkins is not installed!"
+          raise JPM::Errors::CLIExit
+        end
+      end
+    end
+
     desc 'list', "List the installed Jenkins plugins"
     def list
-      if JPM.installed?
-        if JPM.has_plugins?
-          plugins = JPM.plugins.sort do |x, y|
-            x[:name] <=> y[:name]
-          end
-          plugins.each do |plugin|
-            say(" - #{plugin[:name]} (#{plugin[:version]})")
-          end
-        else
-          say 'No plugins found'
+      require_jenkins!
+
+      if JPM.has_plugins?
+        plugins = JPM.plugins.sort do |x, y|
+          x[:name] <=> y[:name]
+        end
+        plugins.each do |plugin|
+          say(" - #{plugin[:name]} (#{plugin[:version]})")
         end
       else
-        say "Jenkins is not installed!"
+        say 'No plugins found'
       end
     end
 
