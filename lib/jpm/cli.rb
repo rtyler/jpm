@@ -6,6 +6,11 @@ require 'jpm/catalog'
 
 module JPM
   class CLI < Thor
+    class_option :verbose, :type => :boolean,
+                           :banner => 'Enable verbose output'
+    class_option :offline, :type => :boolean,
+                           :banner => 'Use `jpm` in a fully offline mode'
+
     desc 'list', "List the installed Jenkins plugins"
     def list
       if JPM.installed?
