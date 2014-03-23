@@ -33,5 +33,18 @@ module JPM
         say "- #{plugin.shortform}\n\n"
       end
     end
+
+    desc 'update', 'Update the local plugin repository meta-data'
+    def update
+      say "Fetching <#{JPM.update_center_url}> ...\n\n"
+
+      response = JPM.fetch(JPM.update_center_url)
+
+      File.open(JPM.repository_path, 'w+') do |fd|
+        fd.write(response.body)
+      end
+
+      say "Wrote to #{JPM.repository_path}"
+    end
   end
 end

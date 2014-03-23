@@ -1,3 +1,8 @@
+require 'net/http'
+require 'uri'
+
+require 'jpm/errors'
+
 module JPM
   # @return [Boolean] True if Jenkins is properly installed
   def self.installed?
@@ -46,6 +51,29 @@ module JPM
   end
 
   def self.repository_path
-    return File.join(self.plugins_dir, 'update-center.json')
+    return File.join(self.home_dir, 'update-center.json')
   end
+
+  def self.update_center_url
+    return "http://updates.jenkins-ci.org/update-center.json"
+  end
+
+  def self.fetch(uri_str, limit = 10)
+    if limit == 0
+      raise JPM::Errors::NetworkError, "Too many HTTP redirects while trying to fetch `#{url_str}`"
+    end
+
+    response = Net::HTTP.get_response(URI(uri_str))
+
+    case response
+    when Net::HTTPSuccess then
+      response
+    when Net::HTTPRedirection then
+      location = response['location']
+      fetch(location, limit - 1)
+    else
+      response.value
+    end
+  end
+
 end
