@@ -30,7 +30,7 @@ module JPM
       catalog = JPM::Catalog.from_file(JPM.repository_path)
 
       catalog.search(term) do |plugin|
-        say "- #{plugin.shortform}"
+        say "- #{plugin.shortform}\n\n"
       end
     end
   end

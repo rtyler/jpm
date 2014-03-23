@@ -15,6 +15,7 @@ Feature: Search for plugins
         version: v0.3.1
          labels: misc
            wiki: <https://wiki.jenkins-ci.org/display/JENKINS/AnsiColor+Plugin>
+
       """
 
 
