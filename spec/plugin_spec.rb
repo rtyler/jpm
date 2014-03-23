@@ -95,5 +95,12 @@ describe JPM::Plugin do
     subject(:shortform) { plugin.shortform }
 
     it { should be_instance_of String }
+
+    context 'with no labels' do
+      before :each do
+        data['labels'] = nil
+      end
+      it { should be_instance_of String }
+    end
   end
 end

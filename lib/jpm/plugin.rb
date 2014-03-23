@@ -10,9 +10,10 @@ module JPM
     #
     # @return [String]
     def shortform
+      labels = @labels || []
       return "#{@title} (#{@name})
   version: v#{@version}
-   labels: #{@labels.join(', ')}
+   labels: #{labels.join(', ')}
      wiki: <#{@wiki}>"
     end
 
