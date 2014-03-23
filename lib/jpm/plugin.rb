@@ -3,8 +3,18 @@ require 'jpm/errors'
 
 module JPM
   class Plugin
-    attr_accessor :name, :title, :version
+    attr_accessor :name, :title, :version, :wiki, :labels
 
+    # Return a formatted string representing an abbreviated format of this
+    # plugin
+    #
+    # @return [String]
+    def shortform
+      return "#{@title} (#{@name})
+  version: v#{@version}
+   labels: #{@labels.join(', ')}
+     wiki: <#{@wiki}>"
+    end
 
     # Create a +JPM::Plugin+ object from the +Hash+ provided by the update
     # center. This allows +JPM::Catalog+ to work with us
@@ -18,6 +28,10 @@ module JPM
 
       plugin = self.new
       plugin.name = plugin_data['name']
+      plugin.title = plugin_data['title']
+      plugin.labels = plugin_data['labels']
+      plugin.version = plugin_data['version']
+      plugin.wiki = plugin_data['wiki']
       return plugin
     end
   end

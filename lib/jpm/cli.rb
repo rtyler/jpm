@@ -1,5 +1,7 @@
-require 'jpm'
 require 'thor'
+
+require 'jpm'
+require 'jpm/catalog'
 
 module JPM
   class CLI < Thor
@@ -18,6 +20,17 @@ module JPM
         end
       else
         say "Jenkins is not installed!"
+      end
+    end
+
+    desc 'search TERM', 'Search for available plugins'
+    def search(term)
+      say "Loading plugin repository data...\n\n"
+
+      catalog = JPM::Catalog.from_file(JPM.repository_path)
+
+      catalog.search(term) do |plugin|
+        say "- #{plugin.shortform}"
       end
     end
   end

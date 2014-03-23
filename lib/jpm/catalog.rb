@@ -36,6 +36,15 @@ module JPM
       return self
     end
 
+
+    def search(term)
+      @plugins.each_pair do |name, plugin|
+        if name.match(term)
+          yield plugin
+        end
+      end
+    end
+
     # Create an instance of a catalog from a file on the current system's disk
     #
     # @param [String] filepath Absolute path to an update-center.json file

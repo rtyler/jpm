@@ -44,4 +44,8 @@ module JPM
     end
     return plugins
   end
+
+  def self.repository_path
+    return File.join(self.plugins_dir, 'update-center.json')
+  end
 end

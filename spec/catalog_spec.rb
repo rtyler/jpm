@@ -3,6 +3,8 @@ require 'jpm/catalog'
 require 'jpm/errors'
 
 describe JPM::Catalog do
+  let(:catalog) { described_class.new }
+
   describe '#current?' do
   end
 
@@ -10,7 +12,6 @@ describe JPM::Catalog do
   end
 
   describe '#<<' do
-    let(:catalog) { described_class.new }
     subject(:add!) { catalog << plugin }
 
     context 'without a JPM::Plugin argument' do
@@ -33,6 +34,10 @@ describe JPM::Catalog do
         expect(catalog.plugins.size).to eql(1)
       end
     end
+  end
+
+  describe '#search' do
+    subject(:search) { catalog.search(term) }
   end
 
   describe '.from_file' do
