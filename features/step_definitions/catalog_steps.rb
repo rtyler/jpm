@@ -4,13 +4,30 @@ Given(/^I have catalog meta\-data$/) do
 end
 
 Given(/^an update\-center\.json doesn't already exist$/) do
-  # Relative path, since our Dir.pwd will be tmp/aruba already
-  repo = './update-center.json'
-  JPM.stub(:repository_path).and_return(repo)
+  # Found in Aruba::Api
+  in_current_dir do
 
-  # If the thing exists already, nuke it!
-  if File.exists? repo
-    File.unlink repo
+    # Relative path, since our Dir.pwd will be tmp/aruba already
+    repo = './update-center.json'
+    JPM.stub(:repository_path).and_return(repo)
+
+    # If the thing exists already, nuke it!
+    if File.exists? repo
+      File.unlink repo
+    end
+  end
+end
+
+Given(/^an update\-center\.json already exists$/) do
+  # Found in Aruba::Api
+  in_current_dir do
+
+    # Relative path, since our Dir.pwd will be tmp/aruba already
+    repo = './update-center.json'
+    JPM.stub(:repository_path).and_return(repo)
+    File.open(repo, 'w+') do |fd|
+      fd.write("\n{}\n")
+    end
   end
 end
 

@@ -60,8 +60,21 @@ module JPM
     option :source, :type => :string,
                     :desc => 'Use a different update-center URL',
                     :default => JPM.update_center_url
+    option :force, :type => :boolean,
+                   :desc => 'Forcefully overwrite any existing repository'
     def update
       url = options[:source]
+
+      if File.exists?(File.expand_path(JPM.repository_path))
+        unless options[:force]
+          force = ask('A version of the repo is already on disk, overwrite?',
+                      :limited_to => ['y', 'n'])
+
+          if force == 'n'
+            raise JPM::Errors::CLIExit
+          end
+        end
+      end
 
       say "Fetching <#{url}> ...\n\n"
 
