@@ -14,3 +14,14 @@ Feature: Update the plugin repository
 
       Wrote to ./update-center.json
       """
+
+  Scenario: Updatign with a custom update-center.json URL
+    Given I have a site with a custom update-center.json
+    When I run `jpm update --source=http://aruba.bdd/update-center.json`
+    Then the exit status should be 0
+    And the output should contain:
+      """
+      Fetching <http://aruba.bdd/update-center.json> ...
+
+      Wrote to ./update-center.json
+      """

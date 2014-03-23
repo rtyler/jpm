@@ -8,9 +8,9 @@ require 'jpm/errors'
 module JPM
   class CLI < Thor
     class_option :verbose, :type => :boolean,
-                           :banner => 'Enable verbose output'
+                           :desc => 'Enable verbose output'
     class_option :offline, :type => :boolean,
-                           :banner => 'Use `jpm` in a fully offline mode'
+                           :desc => 'Use `jpm` in a fully offline mode'
 
     def self.start(*args)
       begin
@@ -57,10 +57,15 @@ module JPM
     end
 
     desc 'update', 'Update the local plugin repository meta-data'
+    option :source, :type => :string,
+                    :desc => 'Use a different update-center URL',
+                    :default => JPM.update_center_url
     def update
-      say "Fetching <#{JPM.update_center_url}> ...\n\n"
+      url = options[:source]
 
-      response = JPM.fetch(JPM.update_center_url)
+      say "Fetching <#{url}> ...\n\n"
+
+      response = JPM.fetch(url)
 
       File.open(JPM.repository_path, 'w+') do |fd|
         fd.write(response.body)
