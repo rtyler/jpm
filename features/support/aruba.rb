@@ -44,7 +44,7 @@ module JPM
                     rescue Exception => ex
                       # Proxy any exception that comes out of Thor itself back
                       # to stderr
-                      $stderr.write(e.message + "\n")
+                      $stderr.write(ex.message + "\n")
                       1
                     ensure
                       $stderr = STDERR
