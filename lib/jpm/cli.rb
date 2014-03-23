@@ -15,9 +15,10 @@ module JPM
     def self.start(*args)
       begin
         super
-      rescue JPM::Errors::CLIExit => ex
-        # Swallow it up
+      rescue JPM::Errors::CLIError => ex
+        return 1
       end
+      return 0
     end
 
     no_tasks do

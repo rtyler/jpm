@@ -37,10 +37,6 @@ module JPM
 
                       # Run our normal Thor app the way we know and love.
                       JPM::CLI.start(@argv)
-
-                      # Thor::Base#start does not have a return value, assume
-                      # success if no exception is raised.
-                      0
                     rescue Exception => ex
                       # Proxy any exception that comes out of Thor itself back
                       # to stderr
