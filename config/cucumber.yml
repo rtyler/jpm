@@ -1,0 +1,7 @@
+<%
+default_opts = "--format progress --expand"
+%>
+default: <%= default_opts %> --tags ~@wip
+offline: <%= default_opts %> --tags ~@network
+wip: <%= default_opts %> --tags @wip
+
