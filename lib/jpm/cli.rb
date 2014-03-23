@@ -1,3 +1,4 @@
+require 'paint'
 require 'thor'
 
 require 'jpm'
