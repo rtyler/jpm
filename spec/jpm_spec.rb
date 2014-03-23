@@ -71,12 +71,12 @@ describe JPM do
         end
 
         context 'but is empty' do
-          let(:entries) { 2 }
+          let(:entries) { ['.', '..'] }
           it { should be false }
         end
 
         context 'and has plugins' do
-          let(:entries) { 3 }
+          let(:entries) { ['.', '..', 'ant'] }
           it { should be true }
         end
       end

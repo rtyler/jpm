@@ -24,7 +24,7 @@ module JPM
     # If the path isn't a valid directory, false
     return false unless File.directory? self.plugins_dir
     # If the directory doesn't have more than ['.', '..'] in it, false
-    return false if Dir.entries(self.plugins_dir) <= 2
+    return false if Dir.entries(self.plugins_dir).size <= 2
     return true
   end
 
