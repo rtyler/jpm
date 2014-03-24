@@ -37,18 +37,57 @@ module JPM
       return self
     end
 
-    # Install a plugin and its dependencies if it has any
-    def install(plugin)
-      unless plugin.dependencies.empty?
-        raise NotImplementedError, "I can't install dependencies yet!"
+    # Compute the installation manifest for the specified plugins
+    #
+    # @param [Array] plugins Collection of +String+ objects which are Jenkins
+    #   plugin names (e.g. 'git-client')
+    # @return [Array] ordered list of plugins to install
+    def compute(names)
+      plugins = []
+      if names.nil? || names.empty?
+        return plugins
       end
 
-      response = JPM.fetch(plugin.url)
-      filename = File.basename(plugin.url)
+      names.each do |name|
+        plugin = self[name]
+        next if plugin.nil?
 
-      return save_plugin(filename, response.body)
+        # Let's recurse down into our dependencies first and get our
+        # dependencies before we add ourselves
+        unless plugin.dependencies.empty?
+          dep_names = plugin.dependencies.map { |p| p.name }
+          plugins = compute(dep_names) + plugins
+        end
+
+        plugins << plugin
+      end
+
+      # We need to uniq ehre on plugin name to make sure don't download thing
+      # over and over again!
+      return plugins.uniq { |p| p.name }
     end
 
+    # Install an +Array+ of +JPM::Plugin+ objects which have already had their
+    # dependencies computed for us
+    #
+    # @param [Array] computed Array of +JPM::Plugin+ objects
+    # @yield [JPM::Plugin] An instance of the installed plugin
+    # @return [Boolean] True if all plugins were installed successfully
+    def install(computed_list)
+      computed_list.each do |plugin|
+        status = download(plugin)
+        yield status, plugin
+      end
+
+      return true
+    end
+
+    # Search our loaded catalog for the named plugin
+    #
+    # @param [String] term
+    # @yield [JPM::Plugin] If passed a block, will yield each +JPM::Plugin+
+    #   search result to it
+    # @return [Array] Array of +JPM::Plugin+ objects if no block given
     def search(term)
       results = []
       @plugins.each_pair do |name, plugin|
@@ -104,10 +143,29 @@ module JPM
 
     private
 
+    # Download and save a single plugin
+    #
+    # @param [JPM::Plugin] plugin
+    # @return [Boolean] True if the plugin was successfully downloaded
+    def download(plugin)
+      response = JPM.fetch(plugin.url)
+      filename = File.basename(plugin.url)
+
+      return save_plugin(filename, response.body)
+    end
+
+    # Write a plugin's data to the filename on disk.
+    #
+    # This method will resolve an absolute path using +JPM.plugins_dir+
+    #
+    # @param [String] filename The plugin file's name (e.g. "git.hpi")
+    # @param [String contents Raw file contents
+    # @return [Boolean]
     def save_plugin(filename, contents)
       File.open(File.join(JPM.plugins_dir, filename), 'wb+') do |fd|
         fd.write(contents)
       end
+      return true
     end
   end
 end

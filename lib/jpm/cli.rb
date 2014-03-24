@@ -115,11 +115,12 @@ module JPM
           say 'Use `jpm search TERM` to find the correct plugin name'
           raise JPM::Errors::CLIError
         end
+      end
 
-        plugin = catalog[name]
-        say "Installing #{name} v#{plugin.version} ...\n"
 
-        catalog.install plugin
+      computed = catalog.compute(names)
+      catalog.install(computed) do |success, plugin|
+        say "Installing #{plugin.name} v#{plugin.version} ...\n"
         installed << plugin
       end
 

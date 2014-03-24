@@ -40,7 +40,53 @@ describe JPM::Catalog do
     subject(:search) { catalog.search(term) }
   end
 
-  describe '#install' do
+  describe '#compute' do
+    let(:fixture) { File.expand_path(File.dirname(__FILE__) + '/fixtures/update-center.json') }
+    let(:catalog) { described_class.from_file(fixture) }
+    subject(:computed_list) { catalog.compute(plugins) }
+
+    context 'with an empty or nil argument' do
+      let(:plugins) { [] }
+      it { should be_empty }
+    end
+
+    context 'with a plugin which has no dependencies' do
+      let(:plugins) { ['greenballs'] }
+
+      it { should_not be_empty }
+      its(:size) { should eql 1 }
+
+      it 'should have an instance of JPM::Plugin<greenballs>' do
+        plugin = computed_list.first
+        expect(plugin).to be_instance_of JPM::Plugin
+        expect(plugin.name).to eql 'greenballs'
+      end
+    end
+
+    context 'with a plugin which has dependencies' do
+      # Depends on `credentials`
+      let(:plugins) { ['ssh-credentials'] }
+
+      it { should_not be_empty }
+      its(:size) { should eql 2 }
+
+      it 'should have the right JPM::Plugins computed' do
+        expect(computed_list.first).to be_instance_of JPM::Plugin
+        expect(computed_list.first.name).to eql 'credentials'
+        expect(computed_list.last.name).to eql 'ssh-credentials'
+      end
+    end
+
+    context 'with a plugin which has nested dependencies' do
+      # Depends on ssh-credentials -> credentials
+      let(:plugins) { ['git-client'] }
+
+      it { should_not be_empty }
+      its(:size) { should eql 3 }
+    end
+  end
+
+  describe '#download' do
     let(:plugin) do
       p = JPM::Plugin.new
       p.name = 'rspec'
@@ -48,7 +94,7 @@ describe JPM::Catalog do
       p
     end
 
-    subject(:installation) { catalog.install(plugin) }
+    subject(:installation) { catalog.send(:download, plugin) }
 
     it 'fetch the url from the plugin' do
       response = double('Mock HTTPResponse',

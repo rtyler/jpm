@@ -36,7 +36,22 @@ Feature: Install a plugin
       """
 
 
+  @install-success
   Scenario: Install a plugin with dependencies
+    Given Jenkins is installed
+    And I have catalog meta-data
+    When I run `jpm install git-client`
+    Then the exit status should be 0
+    And the output should contain:
+      """
+      Loading plugin repository data...
+
+      Installing credentials v1.9.4 ...
+      Installing ssh-credentials v1.6 ...
+      Installing git-client v1.6.1 ...
+
+      Credentials Plugin v1.9.4, SSH Credentials Plugin v1.6, Git Client Plugin v1.6.1 will be loaded on the next restart of Jenkins!
+      """
 
 
   @errorcase

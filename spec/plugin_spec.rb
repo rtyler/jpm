@@ -55,6 +55,7 @@ describe JPM::Plugin do
       end
 
       its(:name) { should eql 'git' }
+      its(:dependencies) { should_not be_empty }
     end
   end
 

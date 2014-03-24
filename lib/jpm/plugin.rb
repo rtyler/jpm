@@ -1,10 +1,11 @@
 require 'jpm'
+require 'jpm/dependency'
 require 'jpm/errors'
 
 module JPM
   class Plugin
     attr_accessor :name, :title, :version, :wiki, :labels, :url
-    attr_reader :dependencies
+    attr_accessor :dependencies
 
     def initialize(*args)
       super
@@ -23,6 +24,7 @@ module JPM
      wiki: <#{@wiki}>"
     end
 
+
     # Create a +JPM::Plugin+ object from the +Hash+ provided by the update
     # center. This allows +JPM::Catalog+ to work with us
     #
@@ -40,6 +42,13 @@ module JPM
       plugin.version = plugin_data['version']
       plugin.wiki = plugin_data['wiki']
       plugin.url = plugin_data['url']
+
+      if plugin_data['dependencies']
+        plugin.dependencies = plugin_data['dependencies'].map do |d|
+          JPM::Dependency.from_hash(d)
+        end
+      end
+
       return plugin
     end
   end
