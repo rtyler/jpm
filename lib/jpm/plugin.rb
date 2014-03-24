@@ -3,7 +3,13 @@ require 'jpm/errors'
 
 module JPM
   class Plugin
-    attr_accessor :name, :title, :version, :wiki, :labels
+    attr_accessor :name, :title, :version, :wiki, :labels, :url
+    attr_reader :dependencies
+
+    def initialize(*args)
+      super
+      @dependencies = []
+    end
 
     # Return a formatted string representing an abbreviated format of this
     # plugin
@@ -33,6 +39,7 @@ module JPM
       plugin.labels = plugin_data['labels']
       plugin.version = plugin_data['version']
       plugin.wiki = plugin_data['wiki']
+      plugin.url = plugin_data['url']
       return plugin
     end
   end

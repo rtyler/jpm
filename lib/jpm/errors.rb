@@ -10,5 +10,7 @@ module JPM
     class MissingCatalogError < StandardError; end;
     class InvalidCatalogError < StandardError; end;
     class InvalidPluginError < StandardError; end;
+
+    class PluginInstallationError < StandardError; end;
   end
 end

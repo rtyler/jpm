@@ -40,6 +40,27 @@ describe JPM::Catalog do
     subject(:search) { catalog.search(term) }
   end
 
+  describe '#install' do
+    let(:plugin) do
+      p = JPM::Plugin.new
+      p.name = 'rspec'
+      p.url = 'http://rspec.jpi'
+      p
+    end
+
+    subject(:installation) { catalog.install(plugin) }
+
+    it 'fetch the url from the plugin' do
+      response = double('Mock HTTPResponse',
+                        :body => '',
+                        :code => 200)
+      JPM.should_receive(:fetch).with(plugin.url).and_return(response)
+      catalog.should_receive(:save_plugin).and_return(true)
+
+      expect(installation).to be_true
+    end
+  end
+
   describe '.from_file' do
     subject(:catalog) { described_class.from_file(fixture) }
 

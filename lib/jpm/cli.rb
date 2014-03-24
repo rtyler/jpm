@@ -96,5 +96,29 @@ module JPM
 
       say "Wrote to #{JPM.repository_path}"
     end
+
+
+    desc 'install NAME', 'Install the named plugin'
+    def install(name)
+      require_jenkins!
+      require_network!
+
+      say "Loading plugin repository data...\n\n"
+
+      catalog = JPM::Catalog.from_file(JPM.repository_path)
+      plugin = catalog[name]
+
+      unless plugin
+        say "`#{name}` is not a plugin I'm familiar with!\n\n"
+        say 'Use `jpm search TERM` to find the correct plugin name'
+        raise JPM::Errors::CLIError
+      end
+
+      say "Installing #{name} v#{plugin.version} ...\n\n"
+
+      catalog.install plugin
+
+      say "#{plugin.title} v#{plugin.version} will be loaded on the next restart of Jenkins!"
+    end
   end
 end

@@ -13,6 +13,7 @@ module JPM
 
     # Dekegate the #size method to our plugins hash
     def_delegator :@plugins, :size
+    def_delegator :@plugins, :[]
 
     def initialize(options={})
       super()
@@ -36,13 +37,31 @@ module JPM
       return self
     end
 
+    # Install a plugin and its dependencies if it has any
+    def install(plugin)
+      unless plugin.dependencies.empty?
+        raise NotImplementedError, "I can't install dependencies yet!"
+      end
+
+      response = JPM.fetch(plugin.url)
+      filename = File.basename(plugin.url)
+
+      return save_plugin(filename, response.body)
+    end
 
     def search(term)
+      results = []
       @plugins.each_pair do |name, plugin|
         if name.match(term)
-          yield plugin
+          if block_given?
+            yield plugin
+          else
+            results << plugin
+          end
         end
       end
+
+      return results
     end
 
     # Create an instance of a catalog from a file on the current system's disk
@@ -81,6 +100,14 @@ module JPM
       end
 
       return catalog
+    end
+
+    private
+
+    def save_plugin(filename, contents)
+      File.open(File.join(JPM.plugins_dir, filename), 'wb+') do |fd|
+        fd.write(contents)
+      end
     end
   end
 end
