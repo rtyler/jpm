@@ -19,8 +19,21 @@ Feature: Install a plugin
       AnsiColor Plugin v0.3.1 will be loaded on the next restart of Jenkins!
       """
 
-
+  @install-success
   Scenario: Install multiple plugins in one command
+    Given Jenkins is installed
+    And I have catalog meta-data
+    When I run `jpm install ansicolor greenballs`
+    Then the exit status should be 0
+    And the output should contain:
+      """
+      Loading plugin repository data...
+
+      Installing ansicolor v0.3.1 ...
+      Installing greenballs v1.13 ...
+
+      AnsiColor Plugin v0.3.1, Green Balls v1.13 will be loaded on the next restart of Jenkins!
+      """
 
 
   Scenario: Install a plugin with dependencies

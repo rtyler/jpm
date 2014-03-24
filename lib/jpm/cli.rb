@@ -98,27 +98,33 @@ module JPM
     end
 
 
-    desc 'install NAME', 'Install the named plugin'
-    def install(name)
+    desc 'install NAMES', 'Install the named plugins'
+    def install(*names)
       require_jenkins!
       require_network!
 
       say "Loading plugin repository data...\n\n"
 
       catalog = JPM::Catalog.from_file(JPM.repository_path)
-      plugin = catalog[name]
 
-      unless plugin
-        say "`#{name}` is not a plugin I'm familiar with!\n\n"
-        say 'Use `jpm search TERM` to find the correct plugin name'
-        raise JPM::Errors::CLIError
+      installed = []
+
+      names.each do |name|
+        unless catalog[name]
+          say "`#{name}` is not a plugin I'm familiar with!\n\n"
+          say 'Use `jpm search TERM` to find the correct plugin name'
+          raise JPM::Errors::CLIError
+        end
+
+        plugin = catalog[name]
+        say "Installing #{name} v#{plugin.version} ...\n"
+
+        catalog.install plugin
+        installed << plugin
       end
 
-      say "Installing #{name} v#{plugin.version} ...\n\n"
-
-      catalog.install plugin
-
-      say "#{plugin.title} v#{plugin.version} will be loaded on the next restart of Jenkins!"
+      installed = installed.map { |p| "#{p.title} v#{p.version}" }
+      say "\n#{installed.join(', ')} will be loaded on the next restart of Jenkins!"
     end
   end
 end
