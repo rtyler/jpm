@@ -91,7 +91,7 @@ module JPM
     def search(term)
       results = []
       @plugins.each_pair do |name, plugin|
-        if name.match(term)
+        if name.match(term) || plugin.title.match(term)
           if block_given?
             yield plugin
           else

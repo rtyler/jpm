@@ -18,4 +18,18 @@ Feature: Search for plugins
 
       """
 
+  Scenario: Searching for a plugin by title
+    Given I have catalog meta-data
+    When I run `jpm search "AnsiColor Plugin"`
+    Then the output should contain:
+      """
+      Loading plugin repository data...
+
+      - AnsiColor Plugin (ansicolor)
+        version: v0.3.1
+         labels: misc
+           wiki: <https://wiki.jenkins-ci.org/display/JENKINS/AnsiColor+Plugin>
+
+      """
+
 
