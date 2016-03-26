@@ -14,12 +14,4 @@ end
 group :development do
   gem 'rake'
   gem 'pry'
-
-  gem 'vagrant', :github => 'mitchellh/vagrant',
-                 :ref => 'v1.5.1',
-                 :platform => :mri
-end
-
-group :plugins do
-  gem 'vagrant-aws', :platform => :mri
 end
