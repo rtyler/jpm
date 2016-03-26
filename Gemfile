@@ -7,7 +7,7 @@ group :test do
   gem 'rspec'
   gem 'cucumber'
   gem 'aruba'
-  gem 'ci_reporter'
+  gem 'ci_reporter_rspec', '~> 1.0'
   gem 'rspec-its'
 end
 
