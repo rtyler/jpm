@@ -41,7 +41,7 @@ Plugin-Developers:
 '
       end
 
-      it { should be_kind_of Hash }
+      it { is_expected.to be_kind_of Hash }
 
       it 'should parse the right plugin version' do
         expect(data[:plugin_version]).to eql('1.2')
@@ -77,7 +77,7 @@ Plugin-Developers: Kohsuke Kawaguchi:kohsuke:,Nicolas De Loof:ndeloof:
 '
       end
 
-      it { should be_kind_of Hash }
+      it { is_expected.to be_kind_of Hash }
       it 'should have the right number of keys' do
         expect(data.keys.size).to eql(18)
       end

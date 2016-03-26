@@ -95,13 +95,13 @@ describe JPM::Plugin do
     let(:plugin) { described_class.from_hash(data) }
     subject(:shortform) { plugin.shortform }
 
-    it { should be_instance_of String }
+    it { is_expected.to be_instance_of String }
 
     context 'with no labels' do
       before :each do
         data['labels'] = nil
       end
-      it { should be_instance_of String }
+      it { is_expected.to be_instance_of String }
     end
   end
 end

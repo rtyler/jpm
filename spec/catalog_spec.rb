@@ -47,13 +47,13 @@ describe JPM::Catalog do
 
     context 'with an empty or nil argument' do
       let(:plugins) { [] }
-      it { should be_empty }
+      it { is_expected.to be_empty }
     end
 
     context 'with a plugin which has no dependencies' do
       let(:plugins) { ['greenballs'] }
 
-      it { should_not be_empty }
+      it { is_expected.not_to be_empty }
       its(:size) { should eql 1 }
 
       it 'should have an instance of JPM::Plugin<greenballs>' do
@@ -67,7 +67,7 @@ describe JPM::Catalog do
       # Depends on `credentials`
       let(:plugins) { ['ssh-credentials'] }
 
-      it { should_not be_empty }
+      it { is_expected.not_to be_empty }
       its(:size) { should eql 2 }
 
       it 'should have the right JPM::Plugins computed' do
@@ -81,7 +81,7 @@ describe JPM::Catalog do
       # Depends on ssh-credentials -> credentials
       let(:plugins) { ['git-client'] }
 
-      it { should_not be_empty }
+      it { is_expected.not_to be_empty }
       its(:size) { should eql 3 }
     end
   end
@@ -100,8 +100,8 @@ describe JPM::Catalog do
       response = double('Mock HTTPResponse',
                         :body => '',
                         :code => 200)
-      JPM.should_receive(:fetch).with(plugin.url).and_return(response)
-      catalog.should_receive(:save_plugin).and_return(true)
+      expect(JPM).to receive(:fetch).with(plugin.url).and_return(response)
+      expect(catalog).to receive(:save_plugin).and_return(true)
 
       expect(installation).to be_true
     end
@@ -113,7 +113,7 @@ describe JPM::Catalog do
     context 'with a valid fixtured update-center.json' do
       let(:fixture) { File.expand_path(File.dirname(__FILE__) + '/fixtures/update-center.json') }
 
-      it { should be_instance_of described_class }
+      it { is_expected.to be_instance_of described_class }
       # Our fixture file currently has 870 plugins in it
       its(:size) { should eql 870 }
     end
