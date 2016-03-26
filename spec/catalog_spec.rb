@@ -103,7 +103,7 @@ describe JPM::Catalog do
       expect(JPM).to receive(:fetch).with(plugin.url).and_return(response)
       expect(catalog).to receive(:save_plugin).and_return(true)
 
-      expect(installation).to be_true
+      expect(installation).to be true
     end
   end
 

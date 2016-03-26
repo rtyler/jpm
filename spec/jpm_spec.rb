@@ -10,7 +10,7 @@ describe JPM do
 
     context 'without Jenkins' do
       let(:home_dir) { nil }
-      it { is_expected.to be_falsey }
+      it { is_expected.to be false }
     end
 
     context 'with Jenkins' do
@@ -102,6 +102,7 @@ describe JPM do
     context 'when plugins exist' do
       it 'should generate a list of plugins' do
         pending 'This is too hard to unit test, feh.'
+        raise
       end
     end
   end
