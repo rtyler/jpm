@@ -8,6 +8,7 @@ group :test do
   gem 'cucumber'
   gem 'aruba'
   gem 'ci_reporter'
+  gem 'rspec-its'
 end
 
 group :development do
