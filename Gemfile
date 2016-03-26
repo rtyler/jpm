@@ -14,8 +14,6 @@ end
 group :development do
   gem 'rake'
   gem 'pry'
-  gem 'debugger', :platform => :mri
-  gem 'debugger-pry', :platform => :mri
 
   gem 'vagrant', :github => 'mitchellh/vagrant',
                  :ref => 'v1.5.1',
