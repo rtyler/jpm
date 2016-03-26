@@ -54,5 +54,7 @@ module JPM
   end
 end
 
-Aruba::InProcess.main_class = JPM::Cucumber::CLIRunner
-Aruba.process = Aruba::InProcess
+Aruba.configure do |config|
+  config.command_launcher = :in_process
+  config.main_class = JPM::Cucumber::CLIRunner
+end
