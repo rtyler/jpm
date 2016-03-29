@@ -10,8 +10,8 @@ describe JPM::Dependency do
         {"name"=>"ssh-credentials", "optional"=>false, "version"=>"1.5.1"}
       end
 
-      it { should be_instance_of described_class }
-      it { should_not be_optional }
+      it { is_expected.to be_instance_of described_class }
+      it { is_expected.not_to be_optional }
       its(:name) { should eql 'ssh-credentials' }
       its(:min_version) { should eql '1.5.1' }
     end

@@ -1,25 +1,27 @@
 Given(/^Jenkins isn't installed$/) do
-  JPM.stub(:installed? => false)
+  allow(JPM).to receive(:installed?) { false }
 end
 
 Given(/^Jenkins is installed$/) do
-  JPM.stub(:installed? => true)
+  allow(JPM).to receive(:installed?) { false }
 end
 
 Given(/^there are no plugins available$/) do
-  JPM.stub(:plugins => [])
+  allow(JPM).to receive(:plugins) { [] }
 end
 
 Given(/^there are plugins available$/) do
-  JPM.stub(:has_plugins? => true)
-  JPM.stub(:plugins => [
-    {
-      :name => 'greenballs',
-      :version => '1.0'
-    },
-    {
-     :name => 'ant',
-     :version => '1.1'
-    },
-  ])
+  allow(JPM).to receive(:has_plugins?) { true }
+  allow(JPM).to receive(:plugins) do
+    [
+      {
+        :name => 'greenballs',
+        :version => '1.0'
+      },
+      {
+       :name => 'ant',
+       :version => '1.1'
+      },
+    ]
+  end
 end

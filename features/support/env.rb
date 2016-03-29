@@ -1,10 +1,5 @@
 require 'rubygems'
 require 'cucumber/rspec/doubles'
+require 'pry'
 
 require 'jpm/cli'
-
-unless RUBY_PLATFORM == 'java'
-  require 'debugger'
-  require 'debugger/pry'
-end
-
